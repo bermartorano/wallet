@@ -4,6 +4,7 @@ export const SAVE_EMAIL = 'SaveUserEmail';
 export const CURR_INFO = 'currInfoReceived';
 export const QUOTATION_UPDATED = 'QUOTATION_UPDATED';
 export const EXPENSE_SUM = 'EXPENSE_SEM';
+export const DELETE_EXPENSE = 'DELETE_EXPENSE';
 
 export const addEmail = (userEmail) => ({
   type: SAVE_EMAIL,
@@ -39,3 +40,8 @@ export const saveFormInfo = (localState) => (
     dispatch(saveCurrenciesInfo(currenciesInfo, localState));
   }
 );
+
+export const deleteExpense = (payload) => ({
+  type: DELETE_EXPENSE,
+  payload,
+});

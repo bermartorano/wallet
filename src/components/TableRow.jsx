@@ -1,7 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { deleteExpense } from '../redux/actions';
 
 class TableRow extends Component {
+  hendleClick = ({ target }) => {
+    const { dispatch } = this.props;
+    dispatch(deleteExpense(target.id));
+  };
+
   render() {
     const {
       expense:
@@ -12,8 +19,10 @@ class TableRow extends Component {
           method,
           tag,
           value,
+          id,
         },
     } = this.props;
+
     const { name, ask } = exchangeRates[currency];
     const convertedValueRouded = (ask * value).toFixed(2);
 
@@ -27,14 +36,28 @@ class TableRow extends Component {
         <td>{parseFloat(ask).toFixed(2)}</td>
         <td>{convertedValueRouded}</td>
         <td>Real</td>
-        <td>teste9</td>
+        <td>
+          <button
+            type="button"
+            data-testid="delete-btn"
+            onClick={ this.hendleClick }
+            id={ id }
+          >
+            Excluir
+          </button>
+        </td>
       </tr>
     );
   }
 }
 
-export default TableRow;
+const mapStateToProps = (state) => ({
+  ...state,
+});
+
+export default connect(mapStateToProps)(TableRow);
 
 TableRow.propTypes = {
+  dispatch: PropTypes.func.isRequired,
   expense: PropTypes.arrayOf(PropTypes.shape(PropTypes.any)).isRequired,
 };

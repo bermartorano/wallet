@@ -1,9 +1,20 @@
-import { CURR_INFO, QUOTATION_UPDATED, EXPENSE_SUM } from '../actions';
+import { CURR_INFO, QUOTATION_UPDATED, EXPENSE_SUM, DELETE_EXPENSE } from '../actions';
 
 const INICIAL_STATE = {
   currencies: [],
   expenses: [],
   totalExpense: 0,
+};
+
+const sumExpenses = (param) => {
+  const totalSum = param.reduce((acc, cur) => {
+    const { exchangeRates, currency, value } = cur;
+    const exchangeRate = exchangeRates[currency].ask;
+    const result = exchangeRate * value;
+    return acc + result;
+  }, 0);
+  const totalSumRounded = totalSum.toFixed(2);
+  return totalSumRounded;
 };
 
 const currencyReducer = (state = INICIAL_STATE, action) => {
@@ -24,14 +35,22 @@ const currencyReducer = (state = INICIAL_STATE, action) => {
 
   case EXPENSE_SUM:
   {
-    const totalSum = state.expenses.reduce((acc, cur) => {
-      const { exchangeRates, currency, value } = cur;
-      const exchangeRate = exchangeRates[currency].ask;
-      const result = exchangeRate * value;
-      return acc + result;
-    }, 0);
-    const totalSumRounded = totalSum.toFixed(2);
-    return { ...state, totalExpense: totalSumRounded };
+    return { ...state, totalExpense: sumExpenses(state.expenses) };
+  }
+
+  case DELETE_EXPENSE:
+  {
+    const { expenses } = state;
+    const clickedExpense = expenses.find((exp) => exp.id.toString() === action.payload);
+    const expensesCopied = [...expenses];
+    const indexToRemove = expensesCopied.indexOf(clickedExpense);
+    expensesCopied.splice(indexToRemove, 1);
+
+    return ({
+      ...state,
+      expenses: expensesCopied,
+      totalExpense: sumExpenses(expensesCopied),
+    });
   }
 
   default:
