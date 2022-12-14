@@ -1,7 +1,11 @@
 .title {
-  background-color: greenyellow;
+  border: zero;
   display: flex;
   justify-content: center;
+  margin: zero;
+  margin-bottom: zero;
+  margin-top: zero;
+  padding: 10px;
 }
 
 .header {
@@ -19,4 +23,35 @@
   justify-content: space-around;
   margin: 5px;
   padding: 7px;
+}
+
+td , th {
+  border: 2px solid rgb(190, 190, 190);
+  padding: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+td {
+  text-align: center;
+}
+
+tr:nth-child( even ) {
+  background-color: #eee;
+}
+
+.header-row {
+  background-color: #d7d9f2;
+}
+
+caption {
+  caption-side: bottom;
+  padding: 10px;
+}
+
+table {
+  border-collapse: collapse;
+  display: flex;
+  justify-content: center;
+  letter-spacing: 1px;
 }
