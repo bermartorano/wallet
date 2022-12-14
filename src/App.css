@@ -14,6 +14,8 @@
   flex-direction: row;
   justify-content: space-around;
   margin: 5px;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .exchange-form {
@@ -22,6 +24,8 @@
   flex-direction: row;
   justify-content: space-around;
   margin: 5px;
+  margin-left: 10px;
+  margin-right: 10px;
   padding: 7px;
 }
 
@@ -51,7 +55,9 @@ caption {
 
 table {
   border-collapse: collapse;
-  display: flex;
   justify-content: center;
   letter-spacing: 1px;
+  margin: 5px;
+  margin-left: 10px;
+  margin-right: 10px;
 }
