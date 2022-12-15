@@ -1,9 +1,17 @@
-import { CURR_INFO, QUOTATION_UPDATED, EXPENSE_SUM, DELETE_EXPENSE } from '../actions';
+import { CURR_INFO,
+  QUOTATION_UPDATED,
+  EXPENSE_SUM, DELETE_EXPENSE,
+  EDIT_EXPENSE,
+  SUBISTITUTE_EXPENSE,
+} from '../actions';
+// texte
 
 const INICIAL_STATE = {
   currencies: [],
   expenses: [],
   totalExpense: 0,
+  idToBeEdited: '',
+  editing: false,
 };
 
 const sumExpenses = (param) => {
@@ -18,29 +26,26 @@ const sumExpenses = (param) => {
 };
 
 const currencyReducer = (state = INICIAL_STATE, action) => {
+  const { expenses, idToBeEdited } = state;
   switch (action.type) {
   case CURR_INFO:
     return { ...state, currencies: action.currencies };
-
   case QUOTATION_UPDATED:
     return ({
       ...state,
       expenses: [
-        ...state.expenses, {
+        ...expenses, {
           ...action.localState,
           exchangeRates: action.currInfo,
         },
       ],
     });
-
   case EXPENSE_SUM:
   {
-    return { ...state, totalExpense: sumExpenses(state.expenses) };
+    return { ...state, totalExpense: sumExpenses(expenses) };
   }
-
   case DELETE_EXPENSE:
   {
-    const { expenses } = state;
     const clickedExpense = expenses.find((exp) => exp.id.toString() === action.payload);
     const expensesCopied = [...expenses];
     const indexToRemove = expensesCopied.indexOf(clickedExpense);
@@ -52,7 +57,21 @@ const currencyReducer = (state = INICIAL_STATE, action) => {
       totalExpense: sumExpenses(expensesCopied),
     });
   }
+  case EDIT_EXPENSE:
+    return { ...state, idToBeEdited: action.payload, editing: true };
 
+  case SUBISTITUTE_EXPENSE:
+  {
+    const expensesCopied = [...expenses];
+    const editedExp = expenses.find((e) => e.id.toString() === idToBeEdited.toString());
+    const indexToEdit = expenses.indexOf(editedExp);
+    expensesCopied[indexToEdit] = {
+      ...expenses[indexToEdit],
+      ...action.localState,
+      id: +idToBeEdited,
+    };
+    return { ...state, editing: false, expenses: expensesCopied };
+  }
   default:
     return state;
   }

@@ -5,6 +5,8 @@ export const CURR_INFO = 'currInfoReceived';
 export const QUOTATION_UPDATED = 'QUOTATION_UPDATED';
 export const EXPENSE_SUM = 'EXPENSE_SEM';
 export const DELETE_EXPENSE = 'DELETE_EXPENSE';
+export const EDIT_EXPENSE = 'EDIT_EXPENSE';
+export const SUBISTITUTE_EXPENSE = 'SUBS_EXPENSE';
 
 export const addEmail = (userEmail) => ({
   type: SAVE_EMAIL,
@@ -44,4 +46,14 @@ export const saveFormInfo = (localState) => (
 export const deleteExpense = (payload) => ({
   type: DELETE_EXPENSE,
   payload,
+});
+
+export const editExpense = (expenseId) => ({
+  type: EDIT_EXPENSE,
+  payload: expenseId,
+});
+
+export const subsExpense = (localState) => ({
+  type: SUBISTITUTE_EXPENSE,
+  localState,
 });

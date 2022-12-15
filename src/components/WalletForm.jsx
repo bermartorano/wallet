@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getCurrencies, saveFormInfo, EXPENSE_SUM } from '../redux/actions';
+import { getCurrencies, saveFormInfo, EXPENSE_SUM, subsExpense } from '../redux/actions';
 
 class WalletForm extends Component {
   state = {
@@ -25,7 +25,7 @@ class WalletForm extends Component {
     });
   };
 
-  handleClick = () => {
+  addClick = () => {
     const { dispatch } = this.props;
     this.setState((state) => ({
       id: state.id + 1,
@@ -39,6 +39,16 @@ class WalletForm extends Component {
     });
   };
 
+  EditClick = () => {
+    const { dispatch } = this.props;
+    dispatch(subsExpense(this.state));
+    dispatch({ type: EXPENSE_SUM });
+    this.setState({
+      value: '',
+      description: '',
+    });
+  };
+
   render() {
     const {
       value,
@@ -47,7 +57,7 @@ class WalletForm extends Component {
       method,
       tag,
     } = this.state;
-    const { currenciesNames } = this.props;
+    const { currenciesNames, editing } = this.props;
 
     return (
       <div>
@@ -118,9 +128,9 @@ class WalletForm extends Component {
               <option value="Saúde">Saúde</option>
             </select>
           </label>
-          <button type="button" onClick={ this.handleClick }>
-            Adicionar despesa
-          </button>
+          {editing
+            ? <button type="button" onClick={ this.EditClick }>Editar despesa</button>
+            : <button type="button" onClick={ this.addClick }>Adicionar despesa</button>}
         </form>
       </div>
     );
@@ -129,6 +139,7 @@ class WalletForm extends Component {
 
 const mapStateToProps = (state) => ({
   currenciesNames: state.wallet.currencies,
+  editing: state.wallet.editing,
 });
 
 export default connect(mapStateToProps)(WalletForm);
@@ -136,4 +147,5 @@ export default connect(mapStateToProps)(WalletForm);
 WalletForm.propTypes = {
   dispatch: PropTypes.func.isRequired,
   currenciesNames: PropTypes.arrayOf(PropTypes.string).isRequired,
+  editing: PropTypes.bool.isRequired,
 };
